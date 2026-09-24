@@ -1,0 +1,13 @@
+{
+  "name": "mern-todo",
+  "version": "1.0.0",
+  "description": "Aplikasi MERN sederhana untuk Vercel dan Acode",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.0"
+  }
+}
