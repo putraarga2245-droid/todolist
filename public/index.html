@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi MERN To-Do</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 400px; margin: 40px auto; padding: 20px; background: #f9f9fb; color: #333; }
+        h2 { text-align: center; color: #0070f3; }
+        .input-group { display: flex; gap: 8px; margin-bottom: 20px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
+        button { padding: 10px 16px; background: #0070f3; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #005bb5; }
+        ul { padding-left: 0; list-style: none; }
+        li { background: white; padding: 12px; margin-bottom: 8px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+    <h2>To-Do List MERN 🚀</h2>
+    
+    <div class="input-group">
+        <input type="text" id="taskInput" placeholder="Mau ngerjain apa hari ini?">
+        <button onclick="addTask()">Tambah</button>
+    </div>
+
+    <ul id="taskList">Memuat data...</ul>
+
+    <script>
+        // Fungsi mengambil data tugas dari backend
+        async function loadTasks() {
+            try {
+                const res = await fetch('/api/tasks');
+                const tasks = await res.json();
+                const list = document.getElementById('taskList');
+                list.innerHTML = '';
+                
+                if (tasks.length === 0) {
+                    list.innerHTML = '<li style="text-align:center; color:#777;">Belum ada tugas. Yuk tambah baru!</li>';
+                    return;
+                }
+
+                tasks.forEach(t => {
+                    const li = document.createElement('li');
+                    li.textContent = t.text;
+                    list.appendChild(li);
+                });
+            } catch (err) {
+                console.error("Gagal memuat tugas", err);
+            }
+        }
+
+        // Fungsi mengirim tugas baru ke backend
+        async function addTask() {
+            const input = document.getElementById('taskInput');
+            if (!input.value.trim()) return;
+
+            await fetch('/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: input.value })
+            });
+
+            input.value = '';
+            loadTasks();
+        }
+
+        loadTasks();
+    </script>
+</body>
+  </html>
